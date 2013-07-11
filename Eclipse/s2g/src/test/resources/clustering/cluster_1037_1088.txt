@@ -1,0 +1,46 @@
+###############################################################
+# Settings:
+# de.lmu.ifi.dbs.elki.workflow.InputStep
+# -db StaticArrayDatabase
+# 
+# de.lmu.ifi.dbs.elki.database.StaticArrayDatabase
+# -dbc FileBasedDatabaseConnection
+# 
+# de.lmu.ifi.dbs.elki.datasource.FileBasedDatabaseConnection
+# -dbc.in /Users/sohle/Downloads/stay_points.txt
+# -dbc.parser NumberVectorLabelParser
+# 
+# de.lmu.ifi.dbs.elki.datasource.parser.NumberVectorLabelParser
+# -parser.colsep (\s+|\s*[,;]\s*)
+# -parser.quote "
+# -parser.labelIndices [unset]
+# -parser.vector-type DoubleVector
+# 
+# de.lmu.ifi.dbs.elki.datasource.FileBasedDatabaseConnection
+# -dbc.filter [unset]
+# 
+# de.lmu.ifi.dbs.elki.database.StaticArrayDatabase
+# -db.index [unset]
+# 
+# de.lmu.ifi.dbs.elki.workflow.AlgorithmStep
+# -time false
+# -algorithm clustering.OPTICSXi
+# 
+# de.lmu.ifi.dbs.elki.algorithm.clustering.OPTICSXi
+# -opticsxi.xi 0.2
+# -opticsxi.algorithm OPTICS
+# 
+# de.lmu.ifi.dbs.elki.algorithm.clustering.OPTICS
+# -algorithm.distancefunction geo.LatLngDistanceFunction
+# -optics.epsilon [unset]
+# -optics.minpts 20
+# 
+# de.lmu.ifi.dbs.elki.workflow.EvaluationStep
+# -evaluator AutomaticEvaluation
+###############################################################
+# Cluster: Cluster_1037_1088
+# OPTICSModel
+# Parents: Cluster
+ID=10656 39.97841 116.300913 '10656' '2009-04-15 09:59:46' '2009-04-16 00:05:10' reachability=0.07597909237407711 predecessor=17512
+ID=13675 39.978687 116.3005364 '13675' '2008-06-23 10:34:53' '2008-06-24 04:48:06' reachability=0.05415054606913159 predecessor=10656
+###############################################################

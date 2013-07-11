@@ -1,0 +1,305 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <artifactId>root</artifactId>
+    <groupId>de.tub</groupId>
+    <version>1.0.0</version>
+  </parent>
+  <artifactId>s2g</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <description></description>
+  
+  <name>s2g</name>
+  <url>http://www.tu-berlin.de</url>
+  
+  <!-- Default application properties -->
+  <properties>
+    <!-- Application arguments -->
+  	<app.argument.method>-h</app.argument.method>
+  	
+  	<!-- Logging -->
+  	<!-- TODO: change to ${user.home} to be more portable -->
+  	<log.dir>${basedir}/log</log.dir>
+  	<log.file_name>app</log.file_name>
+  	<log.file_extension>log</log.file_extension>
+  	
+  	<!-- MySQL database -->
+  	<db.host>localhost</db.host>
+  	<db.driver>com.mysql.jdbc.Driver</db.driver>
+		<db.user>root</db.user>
+		<db.password></db.password>
+		
+		<!-- Neo4j graph database -->
+		<neo4j.path>${basedir}/neo4j-db</neo4j.path>
+  </properties>
+  
+  <profiles>
+  	<!-- Test profile -->
+  	<profile>
+  		<id>test</id>
+  		<activation>
+  			<activeByDefault>true</activeByDefault>
+  		</activation>
+		  <properties>
+		  	<!-- MySQL database -->
+  			<db.url>jdbc:mysql://${db.host}/geo_user_similarity_test</db.url>
+  			<!-- Neo4j graph database -->
+				<neo4j.path>${project.build.testOutputDirectory}/neo4j-db</neo4j.path>
+		  </properties>
+  	</profile>
+
+  	<!-- Development profile -->
+  	<profile>
+  		<id>dev</id>
+  		<properties>
+		  	<!-- Database -->
+  			<db.url>jdbc:mysql://${db.host}/geo_user_similarity</db.url>
+  			<app.argument.addition></app.argument.addition>
+		  </properties>
+  	</profile>
+  
+  	<!-- Starts data preprocessing -->
+  	<profile>
+  		<id>preprocess</id>
+  		<properties>
+		  	<app.argument.method>-p</app.argument.method>
+		  </properties>
+  	</profile>
+  	
+  	<!-- Starts detection of stay points -->
+  	<profile>
+  		<id>sp-detection</id>
+  		<properties>
+		  	<app.argument.method>-s</app.argument.method>
+		  </properties>
+  	</profile>
+  	
+  	<!-- Starts the clustering with ELKI -->
+  	<profile>
+  		<id>clustering</id>
+  		<properties>
+		  	<app.argument.method>-c</app.argument.method>
+		  </properties>
+  	</profile>
+  	
+  	<!-- Starts building of shared framework based on clustering results -->
+  	<profile>
+  		<id>build-shared-framework</id>
+  		<properties>
+		  	<app.argument.method>-bf</app.argument.method>
+		  </properties>
+  	</profile>
+  	
+  	<!-- Starts building of hierarchical graphs for each user based on 
+  				shared framework and each user's stay points -->
+  	<profile>
+  		<id>build-hg</id>
+  		<properties>
+		  	<app.argument.method>-bhg</app.argument.method>
+		  </properties>
+  	</profile>
+  	
+  	<!-- Calculates the similarity between all users -->
+  	<profile>
+  		<id>calc-similarity</id>
+  		<properties>
+		  	<app.argument.method>-cs</app.argument.method>
+		  </properties>
+  	</profile>
+  	
+  	<!-- Calculates the similarity between all users and evaluates the results -->
+  	<profile>
+  		<id>calc-similarity-eval</id>
+  		<properties>
+  			<app.argument.method>-cs</app.argument.method>
+		  	<app.argument.addition>-e</app.argument.addition>
+		  </properties>
+  	</profile>
+  	
+  	<!-- Start the automation which runs the following tasks in a row: 
+  			 clustering of stay points, building of the shared framework, 
+  			 building of a hierarchical graph for each user, similarity measurement -->
+  	<profile>
+  		<id>automate</id>
+  		<properties>
+  			<app.argument.method>-a</app.argument.method>
+		  	<app.argument.addition>-e</app.argument.addition>
+		  </properties>
+  	</profile>
+  </profiles>
+  
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+	  	<groupId>ch.qos.logback</groupId>
+	  	<artifactId>logback-classic</artifactId>
+	  	<version>1.0.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.javalite</groupId>
+      <artifactId>activejdbc</artifactId>
+    </dependency>
+    <dependency>
+		  <groupId>mysql</groupId>
+		  <artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		<dependency>
+	   	<groupId>org.neo4j</groupId>
+	   	<artifactId>neo4j</artifactId>
+	  </dependency>
+		<dependency>
+		  <groupId>com.beust</groupId>
+		  <artifactId>jcommander</artifactId>
+		</dependency>
+		<dependency>
+		  <groupId>de.lmu.ifi.dbs</groupId>
+		  <artifactId>elki</artifactId>
+		</dependency>
+  </dependencies>
+  
+  <build>
+    <plugins>
+    	<!-- Needed for ActiveJDBC -->
+      <plugin>
+        <groupId>org.javalite</groupId>
+        <artifactId>activejdbc-instrumentation</artifactId>
+        <version>1.4.1</version>
+        <executions>
+          <execution>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>instrument</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- Executes a Java binary -->
+      <plugin>
+			  <groupId>org.codehaus.mojo</groupId>
+		      <artifactId>exec-maven-plugin</artifactId>
+			  <version>1.2.1</version>
+			  <executions>
+			    <execution>
+				  <goals>
+				    <goal>exec</goal>
+				  </goals>
+			    </execution>
+			  </executions>
+			  <configuration>
+					<executable>java</executable>
+			 		<commandlineArgs>-Xmx3g -classpath %classpath de.tub.app.Application ${app.argument.method} ${app.argument.addition}</commandlineArgs>
+			  </configuration>
+	    </plugin>
+	    <!-- Handles migrations -->
+	    <plugin>
+		    <groupId>com.carbonfive.db-support</groupId>
+		    <artifactId>db-migration-maven-plugin</artifactId>
+		    <version>0.9.9-m5</version>
+		    <configuration>
+		    	<driver>${db.driver}</driver>
+		      <url>${db.url}</url>
+		      <username>${db.user}</username>
+		      <password>${db.password}</password>
+		    </configuration>
+		    <dependencies>
+		    	<dependency>
+		      	<groupId>mysql</groupId>
+		        <artifactId>mysql-connector-java</artifactId>
+		        <version>${mysql.version}</version>
+		      </dependency>
+		    </dependencies>
+			</plugin>
+			<!-- Empty directories should be included -->
+			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-resources-plugin</artifactId>
+			  <version>2.4.3</version>
+			  <configuration>
+			    <includeEmptyDirs>true</includeEmptyDirs>
+			  </configuration>
+			</plugin>
+			<!-- Generates a sources JAR when packaging -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Generates a javadoc JAR when packaging -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+    </plugins>
+    
+    <pluginManagement>
+    	<plugins>
+    		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+    		<plugin>
+    			<groupId>org.eclipse.m2e</groupId>
+    			<artifactId>lifecycle-mapping</artifactId>
+    			<version>1.0.0</version>
+    			<configuration>
+    				<lifecycleMappingMetadata>
+    					<pluginExecutions>
+    						<pluginExecution>
+    							<pluginExecutionFilter>
+    								<groupId>org.javalite</groupId>
+    								<artifactId>
+    									activejdbc-instrumentation
+    								</artifactId>
+    								<versionRange>
+    									[1.4.1,)
+    								</versionRange>
+    								<goals>
+    									<goal>instrument</goal>
+    								</goals>
+    							</pluginExecutionFilter>
+    							<action>
+    								<ignore></ignore>
+    							</action>
+    						</pluginExecution>
+    					</pluginExecutions>
+    				</lifecycleMappingMetadata>
+    			</configuration>
+    		</plugin>
+    	</plugins>
+    </pluginManagement>
+    
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+    
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>true</filtering>
+      </testResource>
+    </testResources>
+  </build>
+	
+</project>

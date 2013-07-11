@@ -1,0 +1,1 @@
+2012-11-19 10:15:15.095 [main]      ERROR de.tub.app.Application [Application.java:83] - Was passed main parameter '${app.argument.addition}' but no main parameter was defined. Refer to the available options and their explanation below.
