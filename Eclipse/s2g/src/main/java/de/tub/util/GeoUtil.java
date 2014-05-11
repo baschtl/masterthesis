@@ -2,9 +2,6 @@ package de.tub.util;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.tub.data.geo.GeoPointWrapper;
 import de.tub.data.model.GeoPoint;
 
@@ -16,8 +13,6 @@ import de.tub.data.model.GeoPoint;
  *
  */
 public class GeoUtil {
-	
-	private static final Logger LOG = LoggerFactory.getLogger(GeoUtil.class);
 	
 	// Approximate earth radius in meters
 	public static final double EARTH_RADIUS = 6371000;

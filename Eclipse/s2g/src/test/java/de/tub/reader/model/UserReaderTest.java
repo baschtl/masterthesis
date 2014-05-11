@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import de.tub.TestDatabase;
 import de.tub.data.model.User;
-import de.tub.processor.staypoint.GeoStayPointProcessorTest;
 import de.tub.reader.ReaderFactory;
 import de.tub.reader.SimpleUserProcessor;
 import de.tub.reader.model.UserReader;

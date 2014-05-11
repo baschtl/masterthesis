@@ -13,8 +13,6 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.helpers.collection.IteratorUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.tub.graph.CypherQueries;
 import de.tub.graph.NodeProperties;
@@ -38,8 +36,6 @@ import de.tub.util.DBUtil;
  *
  */
 public class Neo4JUserDAO implements IUserDAO<Node>, Cloneable {
-
-	private static final Logger LOG = LoggerFactory.getLogger(Neo4JUserDAO.class);
 	
 	/**
 	 * Standard empty constructor.

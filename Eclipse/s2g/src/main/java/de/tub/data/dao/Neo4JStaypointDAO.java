@@ -5,8 +5,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.Index;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.tub.graph.NodeProperties;
 import de.tub.util.DBUtil;
@@ -27,8 +25,6 @@ import de.tub.util.DBUtil;
  *
  */
 public class Neo4JStaypointDAO implements IStaypointDAO<Node>, Cloneable {
-	
-	private static final Logger LOG = LoggerFactory.getLogger(Neo4JStaypointDAO.class);
 	
 	/**
 	 * Standard empty constructor.
