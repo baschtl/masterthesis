@@ -27,11 +27,11 @@
   	<!-- MySQL database -->
   	<db.host>localhost</db.host>
   	<db.driver>com.mysql.jdbc.Driver</db.driver>
-		<db.user>root</db.user>
-		<db.password></db.password>
-		
-		<!-- Neo4j graph database -->
-		<neo4j.path>${basedir}/neo4j-db</neo4j.path>
+  	<db.user>root</db.user>
+  	<db.password></db.password>
+
+  	<!-- Neo4j graph database -->
+  	<neo4j.path>${basedir}/neo4j-db</neo4j.path>
   </properties>
   
   <profiles>
@@ -168,7 +168,7 @@
       <plugin>
         <groupId>org.javalite</groupId>
         <artifactId>activejdbc-instrumentation</artifactId>
-        <version>1.4.1</version>
+        <version>1.4.9</version>
         <executions>
           <execution>
             <phase>process-classes</phase>
@@ -270,7 +270,7 @@
     									activejdbc-instrumentation
     								</artifactId>
     								<versionRange>
-    									[1.4.1,)
+    									[1.4.9,)
     								</versionRange>
     								<goals>
     									<goal>instrument</goal>

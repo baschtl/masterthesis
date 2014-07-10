@@ -17,10 +17,10 @@
     <mysql.version>5.1.20</mysql.version>
     <junit.version>4.10</junit.version>
     <slf4japi.version>1.6.6</slf4japi.version>
-    <activejdbc.version>1.4.1</activejdbc.version>
+    <activejdbc.version>1.4.9</activejdbc.version>
     <neo4j.version>1.8</neo4j.version>
     <jcommander.version>1.30</jcommander.version>
-    <elki.version>0.5.0</elki.version>
+    <elki.version>0.5.5</elki.version>
   </properties>
   
   <!-- Common dependencies -->
